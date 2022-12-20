@@ -27,5 +27,6 @@ public:
 	AES();
 	~AES();
 
-	void RotWord(char* byte);
+	char* RotWord(char* bytes);
+    char* SubWord(char* bytes);
 };
