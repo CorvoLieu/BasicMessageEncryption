@@ -1,32 +1,17 @@
 #include <iostream>
 #include "dos.h"
 #include "rsa_keygen.h"
+#include "ExpandedKey.h"
+#include "State.h"
 using namespace std;
 
 int main()
 {
-	char choice;
-	cout << ((DEBUG) ? "-------------Key Generator Started-------------\n" : "");
-	cout << ((DEBUG) ? "Select key size:\n1. 512 bits\n2. 1024 bits\n3. 2048 bits\n" : "");
-	cout << ((DEBUG) ? "-----------------\nYou select: " : "");
+	/*auto test = AES::encrypt("theblockbreakers", "2b7e151628aed2a6abf7158809cf4f3c");
 
-	cin >> choice;
-	
-	int len = 0;
+	AES::printState(test[0]);*/
 
-	if (choice == '1')
-		len = 155;
-
-	if (choice == '2')
-		len = 309;
-
-	if (choice == '3')
-		len = 617;
-
-	RSA* rsa = RSA::getInstance(len);
-	cout << "Public key (E):" << rsa->getE() << "- " << Length(rsa->getE()) << " digits\n";
-	cout << "Public key (N):" << rsa->getN() << "- " << Length(rsa->getN()) << " digits\n";
-	cout << "Private key (D):" << rsa->getD() << "- " << Length(rsa->getD()) << " digits\n";
+	cout << AES::toString(AES::toState("the block breakers"));
 
 	return 0;
 }

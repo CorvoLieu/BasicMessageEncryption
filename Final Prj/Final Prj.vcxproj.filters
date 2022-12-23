@@ -24,18 +24,30 @@
     <ClCompile Include="rsa_keygen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExpandedKey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="AES.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AES.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="algorithm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="rsa_keygen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpandedKey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AES.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
