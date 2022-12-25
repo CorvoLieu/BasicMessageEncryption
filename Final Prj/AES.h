@@ -16,6 +16,7 @@ class ExpandedKey
 private:
 	vector<vector<unsigned char>> key;
 	int size;
+	int round;
 public:
 	ExpandedKey();
 	ExpandedKey(string input);
@@ -26,6 +27,7 @@ public:
 	void printKey() const;
 	void setSize(int size);
 	int getSize() const;
+	int getRound() const;
 	vector<unsigned char> operator[](int i) const;
 	static ExpandedKey KeyExpansion(string OGKey);
 };
@@ -41,7 +43,8 @@ private:
 	static unsigned int multiplication_by_13[256];
 	static unsigned int multiplication_by_14[256];
 
-	vector<State> states;
+	static State prefixEn;
+	static State prefixDe;
 
 public:
 	ExpandedKey key;
@@ -55,6 +58,7 @@ public:
 	// Bytewise
 	static bool getBitFrom(char byte, int loca);
 	static vector<unsigned char> RotWord(vector<unsigned char> bytes);
+	static vector<unsigned char> RotWordInverse(vector<unsigned char> bytes);
 	static vector<unsigned char> SubWord(vector<unsigned char> bytes);
 	static vector<unsigned char> SubWordInverse(vector<unsigned char> bytes);
 	static vector<unsigned char> rCon(int val);
@@ -70,13 +74,12 @@ public:
 	static State shiftRow(State state);
 	static State mixColomnEn(State state);
 	static State addRoundKey(State state, ExpandedKey k, int kIndex);
-
 	static vector<State> encrypt(string plaintext, string key);
 
 	// Decrypt
 	static State subStateInverse(State state);
+	static State shiftRowInverse(State state);
 	static State mixColomnDe(State state);
-
 	static string decrypt(vector<State> cipher, string key);
 };
 
