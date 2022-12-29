@@ -337,6 +337,43 @@ void AES::printState(State state)
 	}
 }
 
+string AES::getStrByte(State state)
+{
+	string result = "";
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			stringstream temp;
+			temp << setfill('0') << setw(2) << right << hex << state[i][j];
+			result += temp.str();
+		}
+	}
+
+	return result;
+}
+
+State AES::readStrByte(string bytes)
+{
+	vector<vector<unsigned char>> result;
+
+	for (int i = 0; i < bytes.size(); i += 8)
+	{
+		vector<unsigned char> tempVec;
+		for (int j = 0; j < 8; j += 2)
+		{
+			string temp = "0x";
+			temp += bytes[i + j];
+			temp += bytes[i + j + 1];
+			tempVec.push_back(stoul(temp, nullptr, 16));
+		}
+		result.push_back(tempVec);
+	}
+
+	return State(result);
+}
+
 bool AES::getBitFrom(char byte, int loca)
 {
 	return (byte & (1 << loca)) != 0;
