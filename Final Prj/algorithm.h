@@ -67,6 +67,7 @@ public:
  
     //Read and Write
     friend ostream &operator<<(ostream &,const BigInt &);
+    friend istream& operator>>(istream&, BigInt&);
 
     //Hao
     static BigInt genRandomNum(int size);

@@ -1,4 +1,5 @@
 #include "AES.h"
+#include <sstream>
 
 unsigned int AES::rcon[256] = {
 	0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a,
@@ -346,7 +347,7 @@ string AES::getStrByte(State state)
 		for (int j = 0; j < 4; j++)
 		{
 			stringstream temp;
-			temp << setfill('0') << setw(2) << right << hex << state[i][j];
+			temp << setfill('0') << setw(2) << right << hex << (unsigned int)state[i][j];
 			result += temp.str();
 		}
 	}
@@ -354,24 +355,30 @@ string AES::getStrByte(State state)
 	return result;
 }
 
-State AES::readStrByte(string bytes)
+vector<State> AES::readStrByte(string bytes)
 {
-	vector<vector<unsigned char>> result;
-
-	for (int i = 0; i < bytes.size(); i += 8)
+	vector<State> states;
+	for (int k = 0; k < bytes.length(); k += 32)
 	{
-		vector<unsigned char> tempVec;
-		for (int j = 0; j < 8; j += 2)
+		vector<vector<unsigned char>> state;
+
+		for (int i = 0; i < 32; i += 8)
 		{
-			string temp = "0x";
-			temp += bytes[i + j];
-			temp += bytes[i + j + 1];
-			tempVec.push_back(stoul(temp, nullptr, 16));
+			vector<unsigned char> tempVec;
+			for (int j = 0; j < 8; j += 2)
+			{
+				string temp = "0x";
+				temp += bytes[k + i + j];
+				temp += bytes[k + i + j + 1];
+				tempVec.push_back(stoul(temp, nullptr, 16));
+			}
+			state.push_back(tempVec);
 		}
-		result.push_back(tempVec);
+
+		states.push_back(State(state));
 	}
 
-	return State(result);
+	return states;
 }
 
 bool AES::getBitFrom(char byte, int loca)

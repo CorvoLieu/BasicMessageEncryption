@@ -5,7 +5,6 @@
 #include <iomanip>
 
 #include "State.h"
-#include "ExpandedKey.h"
 
 using namespace std;
 
@@ -69,7 +68,7 @@ public:
 	static string toString(State input);
 	static void printState(State state);
 	static string getStrByte(State state);
-	static State readStrByte(string bytes);
+	static vector<State> readStrByte(string bytes);
 
 	// Encrypt
 	static State subState(State state);

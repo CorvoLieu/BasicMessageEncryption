@@ -129,16 +129,16 @@
   <ItemGroup>
     <ClCompile Include="AES.cpp" />
     <ClCompile Include="algorithm.cpp" />
-    <ClCompile Include="ExpandedKey.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="rsa_keygen.cpp" />
+    <ClCompile Include="rsa.cpp" />
+    <ClCompile Include="sha.cpp" />
     <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AES.h" />
     <ClInclude Include="algorithm.h" />
-    <ClInclude Include="ExpandedKey.h" />
-    <ClInclude Include="rsa_keygen.h" />
+    <ClInclude Include="rsa.h" />
+    <ClInclude Include="sha.h" />
     <ClInclude Include="State.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

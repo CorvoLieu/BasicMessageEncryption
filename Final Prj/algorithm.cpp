@@ -366,8 +366,20 @@ void divide_by_2(BigInt& a)
 ostream& operator<<(ostream& out, const BigInt& a) 
 {
 	for (int i = a.digits.size() - 1; i >= 0; i--)
-		cout << (short)a.digits[i];
-	return cout;
+		out << (short)a.digits[i];
+	return out;
+}
+
+istream& operator>>(istream& in, BigInt& a) {
+	string s;
+	in >> s;
+	int n = s.size();
+	for (int i = n - 1; i >= 0; i--) {
+		if (!isdigit(s[i]))
+			throw("INVALID NUMBER");
+		a.digits[n - i - 1] = s[i];
+	}
+	return in;
 }
 
 BigInt BigInt::genRandomNum(int size)
@@ -409,30 +421,20 @@ BigInt BigInt::gcd(BigInt a, BigInt h)
 BigInt modulo(BigInt A, BigInt B, BigInt mod)
 {
 	BigInt x("1");
-	BigInt y = A;
 	while (B > BigInt("0"))
 	{
 		if (B % 2 == 1)
 		{
-			x = (x * y) % mod;
+			x = x * A;
 		}
-		y = (y * y) % mod;
-		B = B / 2;
-	}
-	return BigInt(x % mod);
-}
 
-// Giải thuật
-// Input số tự nhiên lẻ n
-// Output Số nguyên tố: True/False
-// 1. Phân tích n - 1 = 2^s * m (Trong đó s > 1 và m là số tự nhiên lẻ)
-// 2. Chọn ngẫu nhiên số tự nhiên a thuộc {2,...., n-1}
-// 3. Đặt b = a^m (mod n)
-// 4. Nếu b%n = 1 thì trả về True. Kết thúc.
-// 5. Cho k chạy từ 0 đến s-1:
-// 1. Nếu b mod n = -1 thì trả về True. Kết thúc.
-// 2. thay b:= b^2 (mod n)
-// 6. Trả lời False. Kết thúc.
+		A = A * A;
+
+		B /= 2;
+	}
+
+	return x % mod;
+}
 
 bool Miller(BigInt p, int iteration)
 {
