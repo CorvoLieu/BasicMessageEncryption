@@ -47,7 +47,7 @@ void AliceSide()
 	
 	cout << "Alice done en sign\n";
 	// Alice encrypts AES key with public keys
-	BigInt en_aes_key = modulo(H2BI(aes_key), B_pubkeyE, B_pubkeyN);
+	BigInt en_aes_key = modulo(H2BI(aes_key), BigInt(B_pubkeyE), BigInt(B_pubkeyN));
 	
 	cout << "Alice done en aes\n";
 
@@ -73,7 +73,7 @@ void AliceSide()
 
 void test()
 {
-	cout << modulo(BigInt(1234), BigInt(54), BigInt(12));
+	cout << BI2H(BigInt("1232"));
 	
 }
 
@@ -102,7 +102,10 @@ int main()
 	while (BobReadFile >> A_title)
 	{
 		if (A_title == "A-ciphertext")
+		{
 			getline(BobReadFile, c);
+			c.erase(c.begin());
+		}
 
 		if (A_title == "A-en-aes-key")
 			BobReadFile >> A_en_aeskey;
@@ -121,7 +124,7 @@ int main()
 
 	cout << "Bob done read\n";
 	/* Bob gets the ciphertext and encrypted AES key, decrypt by private key*/
-	BigInt A_de_aeskey = modulo(A_en_aeskey, Bob->getD(), Bob->getN());
+	BigInt A_de_aeskey = modulo(BigInt(A_en_aeskey), Bob->getD(), Bob->getN());
 
 	cout << "Bob done de aes\n";
 	/* Bob decrypt the doc*/
@@ -131,7 +134,7 @@ int main()
 
 	cout << "\nBob done de doc\n";
 	// Bob gets (encrypted signature, public key) and decrypt to get the signature
-	BigInt A_de_sign = modulo(A_en_sign, A_pubkeyE, A_pubkeyN);
+	BigInt A_de_sign = modulo(BigInt(A_en_sign), BigInt(A_pubkeyE), BigInt(A_pubkeyN));
 	cout << BI2H(A_de_sign);
 	// Bob converts doc to hash signature and compare
 	SHA B_sign;
@@ -142,7 +145,7 @@ int main()
 
 	delete[] _digest;
 
-	if (B_signature == A_de_sign)
+	if (B_signature == BI2H(A_de_sign))
 		cout << "\nDone";
 	else
 		cout << "\nOh no";
