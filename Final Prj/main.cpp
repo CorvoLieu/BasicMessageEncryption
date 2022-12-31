@@ -10,7 +10,7 @@ using namespace std;
 void AliceSide()
 {
 	// Alice's doc
-	string doc = "A";
+	string doc = "H";
 
 	// Alice generates keypair 
 	RSA* Alice = RSA::getInstance(5);
@@ -30,31 +30,34 @@ void AliceSide()
 
 	AliceReadFile.close();
 	cout << "Alice done read\n";
+
 	// Alice encrypts doc using AES
 	string aes_key = "2b7e151628aed2a6abf7158809cf4f3c";
 	auto C = AES::encrypt(doc, aes_key);
 
 	cout << "Alice done en aes\n";
+
 	// Alice creates signature by SHA
 	SHA A_sign;
 	A_sign.update(doc);
 	uint8_t* digest = A_sign.digest();
 
-	//cout << SHA::toString(digest) << '\n';
 	string A_signature = SHA::toString(digest);
 
 	delete[] digest;
 	
-	cout << "Alice done en sign\n";
+	cout << "Alice done en sign " << A_signature << endl;
+
 	// Alice encrypts AES key with public keys
-	BigInt en_aes_key = modulo(H2BI(aes_key), BigInt(B_pubkeyE), BigInt(B_pubkeyN));
+	BigInt en_aes_key = moduloExpo(H2BI(aes_key), BigInt(B_pubkeyE), BigInt(B_pubkeyN));
 	
-	cout << "Alice done en aes\n";
+	cout << "Alice done en aes " << en_aes_key << endl;
 
 	// Alice encrypts signature with private key of Alice
-	BigInt en_A_sign = modulo(H2BI(A_signature), Alice->getD(), Alice->getN());
+	BigInt en_A_sign = moduloExpo(H2BI(A_signature), Alice->getD(), Alice->getN());
 
-	cout << "Alice done en sign\n";
+	cout << "Alice done en sign with RSA " << en_A_sign << endl;
+
 	// Alice send ciphertext, encrypted signature, encrypted AES key and public key to cloud
 	ofstream AliceWriteFile("cloud.txt", ios::app);
 
@@ -80,7 +83,7 @@ void test()
 int main()
 {
 	//test();
-	//
+	
 	// Bob generates keypair
 	RSA* Bob = RSA::getInstance(5);
 
@@ -123,19 +126,22 @@ int main()
 	BobReadFile.close();
 
 	cout << "Bob done read\n";
-	/* Bob gets the ciphertext and encrypted AES key, decrypt by private key*/
-	BigInt A_de_aeskey = modulo(BigInt(A_en_aeskey), Bob->getD(), Bob->getN());
+
+	/* Bob decrypts by private key*/
+	BigInt A_de_aeskey = moduloExpo(BigInt(A_en_aeskey), Bob->getD(), Bob->getN());
 
 	cout << "Bob done de aes\n";
-	/* Bob decrypt the doc*/
 	cout << BI2H(A_de_aeskey);
-
+	/* Bob decrypts the doc*/
+	
 	string m = AES::decrypt(AES::readStrByte(c), BI2H(A_de_aeskey));
 
 	cout << "\nBob done de doc\n";
-	// Bob gets (encrypted signature, public key) and decrypt to get the signature
-	BigInt A_de_sign = modulo(BigInt(A_en_sign), BigInt(A_pubkeyE), BigInt(A_pubkeyN));
+
+	// Bob decrypts to get the signature
+	BigInt A_de_sign = moduloExpo(BigInt(A_en_sign), BigInt(A_pubkeyE), BigInt(A_pubkeyN));
 	cout << BI2H(A_de_sign);
+
 	// Bob converts doc to hash signature and compare
 	SHA B_sign;
 	B_sign.update(m);
@@ -146,9 +152,9 @@ int main()
 	delete[] _digest;
 
 	if (B_signature == BI2H(A_de_sign))
-		cout << "\nDone";
+		cout << "\nSucceeded";
 	else
-		cout << "\nOh no";
+		cout << "\nFailed";
 
 	return 0;
 }

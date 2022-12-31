@@ -418,7 +418,7 @@ BigInt BigInt::gcd(BigInt a, BigInt h)
 // --Miller-Rabin primality test--
 
 // Calculates A^B % mod
-BigInt modulo(BigInt A, BigInt B, BigInt mod)
+BigInt moduloExpo(BigInt A, BigInt B, BigInt mod)
 {
 	BigInt x("1");
 	while (B > BigInt("0"))

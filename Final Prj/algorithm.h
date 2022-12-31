@@ -69,13 +69,12 @@ public:
     friend ostream &operator<<(ostream &,const BigInt &);
     friend istream& operator>>(istream&, BigInt&);
 
-    //Hao
+    // Additional
     static BigInt genRandomNum(int size);
     static BigInt gcd(BigInt a, BigInt b);
 };
 
-BigInt mulmod(BigInt a, BigInt b, BigInt mod);
-BigInt modulo(BigInt A, BigInt B, BigInt mod);
+BigInt moduloExpo(BigInt A, BigInt B, BigInt mod);
 bool Miller(BigInt p,int iteration);
 
 #endif
